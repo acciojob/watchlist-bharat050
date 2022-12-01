@@ -42,8 +42,12 @@ public class MovieRepository {
         }
         return movies;
     }
-    public List<Movie> getAllMovie(){
-        return new ArrayList<>(movieList.values());
+    public List<String> getAllMovie(){
+        List<String> m = new ArrayList<>();
+        for(String movie : movieList.keySet()){
+            m.add(movie);
+        }
+        return m;
     }
 
     public void deleteDirectorByName(String director){
