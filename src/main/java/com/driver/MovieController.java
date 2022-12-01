@@ -46,7 +46,7 @@ public class MovieController {
     }
 
     @GetMapping("/movies/get-movies-by-director-name/{director}")
-    public ResponseEntity<List<String>> getMoviesNameByDirectorName(@PathVariable("director") String directorName){
+    public ResponseEntity<List<String>> getMoviesByDirectorName(@PathVariable("director") String directorName){
 
         return new ResponseEntity<>(movieService.getMoviesByDirectorName(directorName), HttpStatus.ACCEPTED);
     }
@@ -64,7 +64,7 @@ public class MovieController {
     }
 
     @DeleteMapping("/movies/delete-all-directors")
-    public ResponseEntity<String> deleteAllDirector(){
+    public ResponseEntity<String> deleteAllDirectors(){
         movieService.deleteAllDirectors();
         return new ResponseEntity<>("success", HttpStatus.ACCEPTED);
     }
