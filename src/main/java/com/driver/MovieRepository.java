@@ -1,8 +1,10 @@
 package com.driver;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,57 +12,43 @@ import java.util.List;
 @Component
 @Repository
 public class MovieRepository {
+    @Autowired
+    DBmanager dBmanager;
 
-    HashMap<String, Movie> movieList = new HashMap<>();
-    HashMap<String, Director> directorList = new HashMap<>();
-    HashMap<String, String> pair = new HashMap<>();
-    public void addMovie(Movie movie){
-        movieList.put(movie.getName(),movie);
-    }
-
-    public void addDirector(Director director){
-        directorList.put(director.getName(), director);
+//    HashMap<String, Movie> movieList = new HashMap<>();
+//    HashMap<String, Director> directorList = new HashMap<>();
+//    HashMap<String, String> pair = new HashMap<>();
+    public void addMovie(Movie movie) throws SQLException {
+       dBmanager.insertMovie(movie);
     }
 
-    public void addMovieDirectorPair(String movie, String director){
-        pair.put(movie, director);
-    }
-    public Movie getMovieByName(String movie){
-        return movieList.get(movie);
+    public void addDirector(Director director) throws SQLException {
+        dBmanager.insertDirector(director);
     }
 
-    public Director getDirectorByName(String director){
-        return directorList.get(director);
+    public void addMovieDirectorPair(String movie, String director) throws SQLException {
+        dBmanager.insertIntoPairs(movie, director);
+    }
+    public String getMovieByName(String movie) throws SQLException {
+        return dBmanager.getMovie(movie);
     }
 
-    public List<String> getMoviesByDirectorName(String director){
-        List<String> movies = new ArrayList<>();
-        for(String movie : pair.keySet()){
-            if(pair.get(movie).equals(director)){
-                movies.add(movie);
-            }
-        }
-        return movies;
+    public String getDirectorByName(String director) throws SQLException {
+        return dBmanager.getDirector(director);
     }
-    public List<String> getAllMovie(){
-        List<String> m = new ArrayList<>();
-        for(String movie : movieList.keySet()){
-            m.add(movie);
-        }
-        return m;
+
+    public String getMoviesByDirectorName(String director) throws SQLException {
+        return dBmanager.getAllMoviesByDirector(director);
+    }
+    public String getAllMovie() throws SQLException {
+        return dBmanager.getAllMovies();
     }
 
     public void deleteDirectorByName(String director){
-        List<String> m = getMoviesByDirectorName(director);
-        for(String movie : m){
-            movieList.remove(movie);
-        }
-        directorList.remove(director);
+        dBmanager.deleteDirectorMovie(director);
     }
 
-    public void deleteAllDirectors(){
-        for(String director : directorList.keySet()){
-            deleteDirectorByName(director);
-        }
+    public void deleteAllDirectors() throws SQLException {
+        dBmanager.deleteAllDirectors();
     }
 }
